@@ -17,7 +17,8 @@ from tensorboardX import SummaryWriter
 
 import util
 from util import AverageMeter
-
+device_ids = [0,1,2,3,4,5]
+    
 
 parser = argparse.ArgumentParser(description='PyTorch DepthNet Training on Still Box dataset')
 util.set_arguments(parser)
@@ -89,7 +90,6 @@ def main():
     else:
         print("=> creating model '{}'".format(args.arch))
         model = models.DepthNet(batch_norm=args.bn, clamp=args.clamp, depth_activation=args.activation_function)
-    device_ids = [0,1,2,3,4,5]
     model = model.to(device)
     
     if torch.cuda.device_count() > 1:
@@ -206,7 +206,7 @@ def train(train_loader, model, optimizer, epoch_size, term_logger, train_writer)
         # compute output
         if torch.cuda.device_count() > 1:
             print("*"*100, "data_parallel line 207")
-            output == torch.parallel.data_parallel(mode, input)
+            output == torch.parallel.data_parallel(mode, input, device_ids=device_ids)
         else:
             output = model(input)
         
