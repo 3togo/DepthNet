@@ -203,8 +203,11 @@ def train(train_loader, model, optimizer, epoch_size, term_logger, train_writer)
         input = torch.cat(input,1).to(device)
 
         # compute output
-        output = model(input)
-
+        if torch.cuda.device_count() > 1:
+            output == torch.parallel.data_parallel(mode, input)
+        else:
+            output = model(input)
+        
         loss = metric_loss(output, target, weights=(0.32, 0.08, 0.02, 0.01, 0.005), loss=args.loss)
         depth2_norm_error = metric_loss(output[0], target, normalize=True)
         depth2_metric_error = metric_loss(output[0], target, normalize=False)
