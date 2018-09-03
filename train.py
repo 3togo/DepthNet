@@ -99,6 +99,7 @@ def main():
         model = torch.nn.DataParallel(model, device_ids=device_ids)
  
     if torch.cuda.is_available():
+        print("&"*100)
         model.cuda()
         
     #model = torch.nn.DataParallel(model.cuda(1), device_ids=device_ids)
@@ -206,6 +207,7 @@ def train(train_loader, model, optimizer, epoch_size, term_logger, train_writer)
         # compute output
         if torch.cuda.device_count() > 1:
             print("*"*100, "data_parallel line 207")
+            input=input.cuda()
             output == torch.parallel.data_parallel(mode, input, device_ids=device_ids)
         else:
             output = model(input)
