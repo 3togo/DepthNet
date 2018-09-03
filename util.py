@@ -112,10 +112,10 @@ def adjust_learning_rate(optimizer, epoch):
     # Set the learning rate to the initial LR decayed by 2 after 300K iterations, 400K and 500K
 
     if epoch == 19 or epoch == 44:
-        for param_group in optimizer.param_groups:
+        for param_group in optimizer.module.param_groups:
             param_group['lr'] = param_group['lr']/2
     if epoch == 30 or epoch == 53:
-        for param_group in optimizer.param_groups:
+        for param_group in optimizer.module.param_groups:
             param_group['lr'] = param_group['lr']/5
 
 

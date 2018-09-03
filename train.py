@@ -89,9 +89,9 @@ def main():
     else:
         print("=> creating model '{}'".format(args.arch))
         model = models.DepthNet(batch_norm=args.bn, clamp=args.clamp, depth_activation=args.activation_function)
-
+    device_ids = [0,1,2,3,4,5]
     model = model.to(device)
-    model = torch.nn.DataParallel(model)
+    model = torch.nn.DataParallel(model.cuda(1), device_ids=device_ids)
     cudnn.benchmark = True
 
     assert(args.solver in ['adam', 'sgd'])
@@ -208,7 +208,7 @@ def train(train_loader, model, optimizer, epoch_size, term_logger, train_writer)
         # compute gradient and do SGD step
         optimizer.zero_grad()
         loss.backward()
-        optimizer.step()
+        optimizer.module.step()
 
         # measure elapsed time
         batch_time.update(time.time() - end)
