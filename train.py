@@ -263,6 +263,7 @@ def validate(val_loader, model, epoch, logger, output_writers=[]):
     for i, (input, target, _) in enumerate(val_loader):
         target = target.to(device)
         input = torch.cat(input, 1).to(device)
+        input = input.cuda()
         # compute output
         output = model(input)
         if log_outputs and i < len(output_writers):  # log first output of 3 first batches
