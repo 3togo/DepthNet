@@ -93,6 +93,7 @@ def main():
     model = model.to(device)
     
     if torch.cuda.device_count() > 1:
+        print("%"*100)
         print("Let's use", torch.cuda.device_count(), "GPUs!")
         # dim = 0 [30, xxx] -> [10, ...], [10, ...], [10, ...] on 3 GPUs
         model = torch.nn.DataParallel(model, device_ids=device_ids)
@@ -204,6 +205,7 @@ def train(train_loader, model, optimizer, epoch_size, term_logger, train_writer)
 
         # compute output
         if torch.cuda.device_count() > 1:
+            print("*"*100, "data_parallel line 207")
             output == torch.parallel.data_parallel(mode, input)
         else:
             output = model(input)
