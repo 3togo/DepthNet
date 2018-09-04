@@ -152,12 +152,12 @@ def main():
         scheduler.step()
 
         # train for one epoch
-        logging.info("train for one epoch: start")
+        logging.info("train for one epoch: start       ")
         term_logger.reset_train_bar()
         term_logger.train_bar.start()
-        logging.info("train for one epoch: done")
-        
         train_loss, train_error, train_normalized_error = train(train_loader, model, optimizer, args.epoch_size, term_logger, train_writer)
+        logging.info("train for one epoch: done         ")
+        
         term_logger.train_writer.write(' * Avg Loss : {:.3f}, Avg Depth error : {:.3f}, normalized : {:.3f}'
                                        .format(train_loss, train_error, train_normalized_error))
         train_writer.add_scalar('metric_error', train_error, epoch)
