@@ -146,15 +146,17 @@ def main():
         return
     logging.info("epoch loop for %d time"%args.epochs)
     for epoch in range(args.epochs):
-        logging.info("epoch=%d :start"%epoch)
+        logging.info("<epoch>=%d :start"%epoch)
         term_logger.epoch_bar.update(epoch)
         #scheduler.module.step()
         scheduler.step()
 
         # train for one epoch
-        logging.info("train for one epoch")
+        logging.info("train for one epoch: start")
         term_logger.reset_train_bar()
         term_logger.train_bar.start()
+        logging.info("train for one epoch: done")
+        
         train_loss, train_error, train_normalized_error = train(train_loader, model, optimizer, args.epoch_size, term_logger, train_writer)
         term_logger.train_writer.write(' * Avg Loss : {:.3f}, Avg Depth error : {:.3f}, normalized : {:.3f}'
                                        .format(train_loss, train_error, train_normalized_error))
