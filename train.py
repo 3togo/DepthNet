@@ -99,15 +99,15 @@ def main():
         model = models.DepthNet(batch_norm=args.bn, clamp=args.clamp, depth_activation=args.activation_function)
     model = model.to(device)
     logging.info("Model created")
-    if torch.cuda.device_count() > 1:
-        print("%"*100)
-        print("Let's use", torch.cuda.device_count(), "GPUs!")
-        # dim = 0 [30, xxx] -> [10, ...], [10, ...], [10, ...] on 3 GPUs
-        model = torch.nn.DataParallel(model, device_ids=device_ids)
+    # if torch.cuda.device_count() > 1:
+        # print("%"*100)
+        # print("Let's use", torch.cuda.device_count(), "GPUs!")
+        # # dim = 0 [30, xxx] -> [10, ...], [10, ...], [10, ...] on 3 GPUs
+        # model = torch.nn.DataParallel(model, device_ids=device_ids)
  
-    if torch.cuda.is_available():
-        print("&"*100)
-        model.cuda()
+    # if torch.cuda.is_available():
+        # print("&"*100)
+        # model.cuda()
         
     #model = torch.nn.DataParallel(model.cuda(1), device_ids=device_ids)
     cudnn.benchmark = True
