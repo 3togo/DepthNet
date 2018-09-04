@@ -263,7 +263,7 @@ def train(train_loader, model, optimizer, epoch_size, term_logger, train_writer)
         if i >= epoch_size - 1:
             break
         n_iter += 1
-
+    logging.info("leave train function")
     return losses.avg, depth2_metric_errors.avg, depth2_normalized_errors.avg
 
 
