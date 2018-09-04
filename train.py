@@ -210,8 +210,9 @@ def train(train_loader, model, optimizer, epoch_size, term_logger, train_writer)
     depth2_normalized_errors = AverageMeter()
 
     # switch to train mode
+    logging.info("switch to train mode : start")
     model.train()
-
+    logging.info("switch to train mode : end")
     end = time.time()
 
     for i, (input, target, _) in enumerate(train_loader):
