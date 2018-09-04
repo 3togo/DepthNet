@@ -139,12 +139,12 @@ def main():
 
     term_logger = TermLogger(n_epochs=args.epochs, train_size=min(len(train_loader), args.epoch_size), test_size=len(val_loader))
     term_logger.epoch_bar.start()
-
+    logging.info("Validate")
     if args.evaluate:
         depth_error, normalized = validate(val_loader, model, 0, term_logger, output_writers)
         term_logger.test_writer.write(' * Depth error : {:.3f}, normalized : {:.3f}'.format(depth_error, normalized))
         return
-
+    loggin.info("epoch loop for %d time"%args.epochs)
     for epoch in range(args.epochs):
         logging.info("epoch=%d :start"%epoch)
         term_logger.epoch_bar.update(epoch)
@@ -275,6 +275,7 @@ def validate(val_loader, model, epoch, logger, output_writers=[]):
     end = time.time()
 
     for i, (input, target, _) in enumerate(val_loader):
+        logging.info("val_loader loop = %d"%i)
         target = target.to(device)
         input = torch.cat(input, 1).to(device)
         input = input.cuda()
