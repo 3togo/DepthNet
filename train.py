@@ -204,7 +204,7 @@ def train(train_loader, model, optimizer, epoch_size, term_logger, train_writer)
         data_time.update(time.time() - end)
         target = target.to(device)
         input = torch.cat(input,1).to(device)
-
+        input, target = input.cuda(), target.cuda()
         # compute output
         if torch.cuda.device_count() > 1:
             print("*"*100, "data_parallel line 207")
