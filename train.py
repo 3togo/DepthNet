@@ -144,7 +144,7 @@ def main():
         depth_error, normalized = validate(val_loader, model, 0, term_logger, output_writers)
         term_logger.test_writer.write(' * Depth error : {:.3f}, normalized : {:.3f}'.format(depth_error, normalized))
         return
-    loggin.info("epoch loop for %d time"%args.epochs)
+    logging.info("epoch loop for %d time"%args.epochs)
     for epoch in range(args.epochs):
         logging.info("epoch=%d :start"%epoch)
         term_logger.epoch_bar.update(epoch)
