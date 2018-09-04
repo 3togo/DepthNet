@@ -17,6 +17,13 @@ from tensorboardX import SummaryWriter
 
 import util
 from util import AverageMeter
+
+import logging
+
+logging.basicConfig(format='%(asctime)s,%(msecs)d %(levelname)-8s [%(filename)s:%(lineno)d] %(message)s',
+    datefmt='%d-%m-%Y:%H:%M:%S',
+    level=logging.DEBUG)
+    
 device_ids = [0,1,2,3,4,5]
     
 
@@ -31,7 +38,7 @@ device = torch.device("cuda") if torch.cuda.is_available() else torch.device("cp
 def main():
     global args, best_error, viz
     args = util.set_params(parser)
-
+    logging.info("[starting]"*10)
     train_writer = SummaryWriter(args.save_path/'train')
     val_writer = SummaryWriter(args.save_path/'val')
     output_writers = []
