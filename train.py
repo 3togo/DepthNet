@@ -223,7 +223,7 @@ def train(train_loader, model, optimizer, epoch_size, term_logger, train_writer)
         input, target = input.cuda(), target.cuda()
         # compute output
         if torch.cuda.device_count() > 1:
-            logging.info("%s %s"%(*"*100, "data_parallel line 207"))
+            logging.info("%s %s"%("*"*100,"data_parallel line 207"))
             input=input.cuda()
             output = torch.nn.parallel.data_parallel(model, input, device_ids=device_ids)
         else:
