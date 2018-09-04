@@ -66,7 +66,7 @@ def main():
         co_transforms.RandomHorizontalFlip()
     ])
 
-    print("=> fetching scenes in '{}'".format(args.data))
+    logging.info("=> fetching scenes in '{}'".format(args.data))
     train_set, val_set = datasets.still_box(
         args.data,
         transform=input_transform,
@@ -75,7 +75,7 @@ def main():
         split=args.split,
         seed=args.seed
     )
-    print('{} samples found, {} train scenes and {} validation samples '.format(len(val_set)+len(train_set),
+    logging.info('{} samples found, {} train scenes and {} validation samples '.format(len(val_set)+len(train_set),
                                                                                 len(train_set),
                                                                                 len(val_set)))
     train_loader = torch.utils.data.DataLoader(
@@ -98,7 +98,7 @@ def main():
         print("=> creating model '{}'".format(args.arch))
         model = models.DepthNet(batch_norm=args.bn, clamp=args.clamp, depth_activation=args.activation_function)
     model = model.to(device)
-    
+    logging.info("Model created")
     if torch.cuda.device_count() > 1:
         print("%"*100)
         print("Let's use", torch.cuda.device_count(), "GPUs!")
@@ -127,7 +127,8 @@ def main():
     scheduler = torch.optim.lr_scheduler.MultiStepLR(optimizer,
                                                      milestones=[19,30,44,53],
                                                      gamma=0.3)
-
+    logging.info("Optimizer created")
+    
     with open(os.path.join(args.save_path, args.log_summary), 'w') as csvfile:
         writer = csv.writer(csvfile, delimiter='\t')
         writer.writerow(['train_loss', 'train_depth_error', 'normalized_train_depth_error', 'depth_error', 'normalized_depth_error'])
@@ -145,11 +146,13 @@ def main():
         return
 
     for epoch in range(args.epochs):
+        logging.info("epoch=%d :start"%epoch)
         term_logger.epoch_bar.update(epoch)
         #scheduler.module.step()
         scheduler.step()
 
         # train for one epoch
+        logging.info("train for one epoch")
         term_logger.reset_train_bar()
         term_logger.train_bar.start()
         train_loss, train_error, train_normalized_error = train(train_loader, model, optimizer, args.epoch_size, term_logger, train_writer)
@@ -159,6 +162,7 @@ def main():
         train_writer.add_scalar('metric_normalized_error', train_normalized_error, epoch)
 
         # evaluate on validation set
+        logging.info("evaluate on validation set")
         term_logger.reset_test_bar()
         term_logger.test_bar.start()
         depth_error, normalized = validate(val_loader, model, epoch, term_logger, output_writers)
@@ -170,6 +174,7 @@ def main():
             best_error = depth_error
 
         # remember lowest error and save checkpoint
+        logging.info("remember lowest error and save checkpoint")
         is_best = depth_error < best_error
         best_error = min(depth_error, best_error)
         util.save_checkpoint(
@@ -190,6 +195,7 @@ def main():
         with open(os.path.join(args.save_path, args.log_summary), 'a') as csvfile:
             writer = csv.writer(csvfile, delimiter='\t')
             writer.writerow([train_loss, train_error, depth_error])
+        logging.info("epoch=%d done"%epoch)
     term_logger.epoch_bar.finish()
 
 
