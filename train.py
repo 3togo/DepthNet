@@ -155,6 +155,7 @@ def main():
         logging.info("train for one epoch: start       ")
         term_logger.reset_train_bar()
         term_logger.train_bar.start()
+        logging.info("it might take more than 3min     ")
         train_loss, train_error, train_normalized_error = train(train_loader, model, optimizer, args.epoch_size, term_logger, train_writer)
         logging.info("train for one epoch: done         ")
         
@@ -242,8 +243,8 @@ def train(train_loader, model, optimizer, epoch_size, term_logger, train_writer)
         # compute gradient and do SGD step
         optimizer.zero_grad()
         loss.backward()
-        optimizer.module.step()
-
+        #optimizer.module.step()
+        optimizer.step()
         # measure elapsed time
         batch_time.update(time.time() - end)
         end = time.time()
