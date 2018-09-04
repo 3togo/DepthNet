@@ -139,7 +139,7 @@ def main():
 
     for epoch in range(args.epochs):
         term_logger.epoch_bar.update(epoch)
-        scheduler.step()
+        scheduler.module.step()
 
         # train for one epoch
         term_logger.reset_train_bar()
