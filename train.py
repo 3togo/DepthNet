@@ -216,13 +216,14 @@ def train(train_loader, model, optimizer, epoch_size, term_logger, train_writer)
 
     for i, (input, target, _) in enumerate(train_loader):
         # measure data loading time
+        logging.info("train_loader=%d"%i)
         data_time.update(time.time() - end)
         target = target.to(device)
         input = torch.cat(input,1).to(device)
         input, target = input.cuda(), target.cuda()
         # compute output
         if torch.cuda.device_count() > 1:
-            print("*"*100, "data_parallel line 207")
+            logging.info("%s %s"%(*"*100, "data_parallel line 207"))
             input=input.cuda()
             output = torch.nn.parallel.data_parallel(model, input, device_ids=device_ids)
         else:
